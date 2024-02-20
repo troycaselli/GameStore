@@ -5,8 +5,14 @@
 
 <h1>Game Catalog</h1>
 
-<table>
-    <thead>
+@if (games is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+<table class="table table-striped table-bordered table-hover">
+    <thead class="table-dark">
         <th>Id</th>
         <th>Name</th>
         <th>Genre</th>
@@ -28,33 +34,13 @@
         }
     </tbody>
 </table>
+}
 
 @code {
-    private Game[] games = new[]
-    {
-        new Game()
+    private Game[]? games;
+
+        protected override void OnInitialized()
         {
-            Id = 1,
-            Name = "Street Fighter II",
-            Genre = "Fighting",
-            Price = 19.99M,
-            ReleaseDate = new DateTime(1991, 2, 1)
-        },
-         new Game()
-        {
-            Id = 2,
-            Name = "Final Fantasy XIV",
-            Genre = "Roleplaying",
-            Price = 59.99M,
-            ReleaseDate = new DateTime(2010, 9, 30)
-        },
-         new Game()
-        {
-            Id = 3,
-            Name = "FIFA 23",
-            Genre = "Sports",
-            Price = 69.99M,
-            ReleaseDate = new DateTime(2022, 9, 27)
+            games = GameClient.GetGames();
         }
-    };
 }
