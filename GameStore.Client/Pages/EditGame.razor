@@ -3,9 +3,9 @@
 @using Models
 @inject NavigationManager NavigationManager
 
-<PageTitle>New game</PageTitle>
+<PageTitle>@title</PageTitle>
 <h1>Game Catalog</h1>
-<h3>New Game</h3>
+<h3>@title</h3>
 
 @if (game is null)
 {
@@ -54,28 +54,34 @@ else
 
     private Game? game;
 
+    private string title = string.Empty;
+
     protected override void OnParametersSet()
     {
         if (Id is not null)
         {
             Game foundGame = GameClient.GetGame(Id.Value);
             game = new()
-                {
-                    Id = foundGame.Id,
-                    Name = foundGame.Name,
-                    Genre = foundGame.Genre,
-                    Price = foundGame.Price,
-                    ReleaseDate = foundGame.ReleaseDate
-                };
+            {
+                Id = foundGame.Id,
+                Name = foundGame.Name,
+                Genre = foundGame.Genre,
+                Price = foundGame.Price,
+                ReleaseDate = foundGame.ReleaseDate
+            };
+
+            title = $"Edit {game.Name}";
         }
         else
         {
             game = new()
-                {
-                    Name = string.Empty,
-                    Genre = string.Empty,
-                    ReleaseDate = DateTime.UtcNow
-                };
+            {
+                Name = string.Empty,
+                Genre = string.Empty,
+                ReleaseDate = DateTime.UtcNow
+            };
+
+            title = "New Game";
         }
     }
 
