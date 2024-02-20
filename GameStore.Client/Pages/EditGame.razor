@@ -15,7 +15,14 @@
             </div>
             <div class="mb-3">
                 <label for="genre" class="form-label">Genre:</label>
-                <InputText id="genre" @bind-Value="game.Genre" class="form-control"></InputText>
+                <InputSelect id="genre" @bind-Value="game.Genre" class="form-select">
+                    <option value="">Select Genre</option>
+                    <option value="Fighting">Fighting</option>
+                    <option value="Kids and Family">Kids and Family</option>
+                    <option value="Racing">Racing</option>
+                    <option value="Roleplaying">Roleplaying</option>
+                    <option value="Sports">Sports</option>
+                </InputSelect>
             </div>
             <div class="mb-3">
                 <label for="price" class="form-label">Price:</label>
