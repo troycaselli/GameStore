@@ -18,50 +18,70 @@
 }
 else
 {
-<table class="table table-striped table-bordered table-hover">
-    <thead class="table-dark">
-        <th>Id</th>
-        <th>Name</th>
-        <th>Genre</th>
-        <th>Price</th>
-        <th>Release Date</th>
-        <th></th>
-    </thead>
-    <tbody>
-        @foreach (var game in games)
-        {
-            <tr>
-                <td>@game.Id</td>
-                <td>@game.Name</td>
-                <td>@game.Genre</td>
-                <td>@game.Price</td>
-                <td>@game.ReleaseDate.ToString("MM/dd/yyyy")</td>
-                <td>
-                    <button class="btn btn-primary" @onclick="() => EditGame(game.Id)">
-                        <i class="oi oi-pencil"></i>
-                    </button>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+    <DeleteGame Game="@currentGame" OnClose="@OnDeleteModalClose" />
+ 
+    <table class="table table-striped table-bordered table-hover">
+        <thead class="table-dark">
+            <th>Id</th>
+            <th>Name</th>
+            <th>Genre</th>
+            <th>Price</th>
+            <th>Release Date</th>
+            <th></th>
+        </thead>
+        <tbody>
+            @foreach (var game in games)
+            {
+                <tr>
+                    <td>@game.Id</td>
+                    <td>@game.Name</td>
+                    <td>@game.Genre</td>
+                    <td>@game.Price</td>
+                    <td>@game.ReleaseDate.ToString("MM/dd/yyyy")</td>
+                    <td>
+                        <button class="btn btn-primary" @onclick="() => EditGame(game.Id)">
+                            <i class="oi oi-pencil"></i>
+                        </button>
+                        <button 
+                            class="btn btn-danger" 
+                            data-bs-toggle="modal" 
+                            data-bs-target="#deleteModal" 
+                            @onclick="() => currentGame = game">
+                            <i class="oi oi-x"></i>
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 }
 
 @code {
     private Game[]? games;
 
-        protected override void OnInitialized()
+    private Game? currentGame;
+
+    protected override void OnInitialized()
+    {
+        games = GameClient.GetGames();
+    }
+
+    private void CreateGame()
+    {
+        NavigationManager.NavigateTo("/game");
+    }
+
+    private void EditGame(int id)
+    {
+        NavigationManager.NavigateTo($"/game/{id}");
+    }
+
+    private void OnDeleteModalClose(bool accepted)
+    {
+        if (accepted)
         {
+            GameClient.DeleteGame(currentGame!.Id);
             games = GameClient.GetGames();
         }
-
-        private void CreateGame()
-        {
-            NavigationManager.NavigateTo("/game");
-        }
-
-        private void EditGame(int id)
-        {
-            NavigationManager.NavigateTo($"/game/{id}");
-        }
+    }
 }
