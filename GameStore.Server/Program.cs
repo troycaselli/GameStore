@@ -31,7 +31,11 @@ List<Game> games = new()
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-var group = app.MapGroup("/games");
+// grouping endpoints with similar urls
+var group = app.MapGroup("/games")
+    // Validation for Game method from MinimalApis.Extensions package
+    .WithParameterValidation();
+
 
 // GET /games
 group.MapGet("/", () => games);
@@ -56,11 +60,11 @@ group.MapPost("/", (Game game) =>
     game.Id = games.Max(game => game.Id) + 1;
     games.Add(game);
 
-    return Results.CreatedAtRoute("GetGame", new {id = game.Id}, game);
+    return Results.CreatedAtRoute("GetGame", new { id = game.Id }, game);
 });
 
 // PUT /games/{id}
-group.MapPut("/{id}", (int id, Game updatedGame) => 
+group.MapPut("/{id}", (int id, Game updatedGame) =>
 {
     Game? game = games.Find(game => game.Id == id);
 
@@ -68,7 +72,7 @@ group.MapPut("/{id}", (int id, Game updatedGame) =>
     {
         updatedGame.Id = id;
         games.Add(updatedGame);
-        return Results.CreatedAtRoute("GetGame", new {id = updatedGame.Id}, updatedGame);
+        return Results.CreatedAtRoute("GetGame", new { id = updatedGame.Id }, updatedGame);
     }
 
     game.Name = updatedGame.Name;

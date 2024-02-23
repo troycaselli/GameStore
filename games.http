@@ -24,7 +24,7 @@ content-type: application/json
 
 ###
 
-PUT {{baseUrl}}/games/7
+PUT {{baseUrl}}/games/3
 content-type: application/json
 
 {
