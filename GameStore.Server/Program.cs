@@ -29,7 +29,17 @@ List<Game> games = new()
 };
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options => options.AddDefaultPolicy(builder => 
+{
+    builder.WithOrigins("http://localhost:5290")
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+}));
+
 var app = builder.Build();
+
+app.UseCors();
 
 // grouping endpoints with similar urls
 var group = app.MapGroup("/games")
