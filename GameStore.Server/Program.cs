@@ -1,3 +1,4 @@
+using GameStore.Server.Data;
 using GameStore.Server.Models;
 
 List<Game> games = new()
@@ -38,6 +39,7 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
 }));
 
 var connString = builder.Configuration.GetConnectionString("GameStoreContext");
+builder.Services.AddSqlServer<GameStoreContext>(connString);
 
 var app = builder.Build();
 
