@@ -37,6 +37,8 @@ builder.Services.AddCors(options => options.AddDefaultPolicy(builder =>
         .AllowAnyMethod();
 }));
 
+var connString = builder.Configuration.GetConnectionString("GameStoreContext");
+
 var app = builder.Build();
 
 app.UseCors();
