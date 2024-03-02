@@ -11,6 +11,14 @@
     <div class="col-sm-6">
         <button type="button" class="btn btn-primary" @onclick="CreateGame">New Game</button>
     </div>
+    <div class="col">
+        <input type="text" 
+        class="form-control" 
+        placeholder="Search by name or genre" 
+        @bind="searchString"
+        @bind:event="oninput"
+        @onkeyup="FetchGamesAsync" />
+    </div>
 </div>
 
 @if (games is null)
@@ -61,10 +69,11 @@ else
     private Game[]? games;
 
     private Game? currentGame;
+    private string? searchString;
 
     protected override async Task OnInitializedAsync()
     {
-        games = await client.GetGamesAsync();
+        await FetchGamesAsync();
     }
 
     private void CreateGame()
@@ -82,7 +91,12 @@ else
         if (accepted)
         {
             await client.DeleteGameAsync(currentGame!.Id);
-            games = await client.GetGamesAsync();
+            await FetchGamesAsync();
         }
+    }
+
+    private async Task FetchGamesAsync()
+    {
+         games = await client.GetGamesAsync(searchString);
     }
 }

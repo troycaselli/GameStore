@@ -26,8 +26,20 @@ var group = app.MapGroup("/games")
 
 
 // GET /games
-group.MapGet("/", async (GameStoreContext context) =>
-    await context.Games.AsNoTracking().ToListAsync());
+group.MapGet("/", async (string? filter, GameStoreContext context) =>
+{
+    var games = context.Games.AsNoTracking();
+
+    if (filter != null)
+    {
+        games = games.Where(
+            game => game.Name.Contains(filter) 
+            || game.Genre.Contains(filter)
+        );
+    }
+
+    return await games.ToListAsync();
+});
 
 // GET /games/{id}
 group.MapGet("/{id}", async (int id, GameStoreContext context) =>
